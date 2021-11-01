@@ -19,17 +19,29 @@ export class MenuComponent implements OnInit {
   ngOnInit(): void {
     this.items = [
       {
+        label: 'Repo',
+        icon: 'pi pi-book',
+        routerLink: '/repo'
+      },
+      {
         label: 'Upload',
-        icon: 'pi pi-fw pi-arrow-circle-up',
-        items: [
-          {label: 'File', icon: 'pi pi-file', routerLink: '/upload/file'},
-          {label: 'Folder', icon: 'pi pi-folder', routerLink: '/upload/folder'},
-        ]
+        icon: 'pi pi-arrow-circle-up',
+        routerLink: '/upload'
+      },
+      {
+        label: 'Versioning',
+        icon: 'pi pi-tags',
+        routerLink: '/versioning'
       },
       {
         label: 'Export',
-        icon: 'pi pi-bookmark',
+        icon: 'pi pi-download',
         command: _ => this.tagService.export()
+      },
+      {
+        label: 'Exit',
+        icon: 'pi pi-sign-out',
+        routerLink: '/'
       }
     ];
   }

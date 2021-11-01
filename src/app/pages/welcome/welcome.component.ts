@@ -51,7 +51,7 @@ export class WelcomeComponent implements OnInit {
     this.resolving = true;
     file.text().then((text) => {
       let content = JSON.parse(text);
-      console.log("loaded content", content);
+      console.log("loaded entry count", content.length);
       if (this.resolving) {
         this.loadedTags = content;
         this.messageService.addSuccessMessage(`Loaded ${this.loadedTags.length} tag(s)`);
@@ -77,14 +77,16 @@ export class WelcomeComponent implements OnInit {
       .subscribe((value) => {
         if (value == host) {
           console.log("Validate backend!");
-          this.tagService.load(this.loadedTags);
-          this.router.navigate(["/home"]).then(r => {
-            if (!r) this.messageService.addErrorMessage("Cannot navigate to home page");
+          this.tagService.load(this.loadedTags).subscribe((resp) => {
+            this.busying = false;
+            this.router.navigate(["/home"]).then(r => {
+              if (!r) this.messageService.addErrorMessage("Cannot navigate to home page");
+            });
           });
         } else {
           this.messageService.addErrorMessage("Cannot validate backend");
+          this.busying = false;
         }
-        this.busying = false;
       })
   }
 

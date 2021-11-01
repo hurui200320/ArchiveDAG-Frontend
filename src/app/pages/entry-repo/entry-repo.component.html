@@ -1,0 +1,23 @@
+<p-panel header="Tag repo" class="py-3 px-1">
+  <ng-template pTemplate="icons">
+    <ng-container>
+      <div class="flex align-items-center justify-content-end">
+        <button pButton type="button" label="Remove" icon="pi pi-trash" class="mx-1"
+                (click)="removeSelected()"
+                [disabled]="selectedTags.length == 0"></button>
+        <button pButton type="button" label="Create tree" icon="pi pi-plus" class="mx-1"
+                [disabled]="selectedTags.length == 0"
+                (click)="createTree()"></button>
+      </div>
+    </ng-container>
+  </ng-template>
+
+  <div>
+    <app-entry-list [value]="tags" [allowSelection]="true"
+                    [(selection)]="selectedTags"
+    ></app-entry-list>
+  </div>
+  <div class="flex justify-content-center" *ngIf="tags.length == 0">
+    <h4>Nothing to show here... Try upload something.</h4>
+  </div>
+</p-panel>

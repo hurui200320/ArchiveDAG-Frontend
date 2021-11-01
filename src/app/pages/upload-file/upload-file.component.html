@@ -1,0 +1,14 @@
+<div class="py-3">
+  <p-panel header="Upload file" class="px-5" *ngIf="uploadedResult.length == 0">
+    <p-fileUpload name="files" [url]="uploadUrl" [multiple]="true"
+                  (onBeforeUpload)="beforeUpload($event)"
+                  (onUpload)="afterUpload($event)"
+                  (onError)="uploadError($event)"
+    ></p-fileUpload>
+  </p-panel>
+  <p-panel header="Upload result" class="px-5" *ngIf="uploadedResult.length != 0">
+    <div>
+      <app-entry-list [value]="uploadedResult"></app-entry-list>
+    </div>
+  </p-panel>
+</div>
