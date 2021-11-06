@@ -33,6 +33,10 @@ import { RepoChunksComponent } from './pages/repo-chunks/repo-chunks.component';
 import { RepoTreesComponent } from './pages/repo-trees/repo-trees.component';
 import { RepoCommitsComponent } from './pages/repo-commits/repo-commits.component';
 import { LinkListComponent } from './components/link-list/link-list.component';
+import {InputTextareaModule} from "primeng/inputtextarea";
+import {RouteReuseStrategy} from "@angular/router";
+import {CustomRouteReuseStrategy} from "./config/CustomRouteReuseStrategy";
+import { CommitInfoComponent } from './components/commit-info/commit-info.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +54,7 @@ import { LinkListComponent } from './components/link-list/link-list.component';
     RepoTreesComponent,
     RepoCommitsComponent,
     LinkListComponent,
+    CommitInfoComponent,
   ],
     imports: [
         BrowserModule,
@@ -71,8 +76,15 @@ import { LinkListComponent } from './components/link-list/link-list.component';
         TagModule,
         DialogModule,
         DropdownModule,
+        InputTextareaModule,
     ],
-  providers: [MessageService],
+  providers: [
+    MessageService,
+    {
+      provide: RouteReuseStrategy,
+      useClass: CustomRouteReuseStrategy
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

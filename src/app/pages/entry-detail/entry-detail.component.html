@@ -20,6 +20,60 @@
         <p-button icon="pi pi-check" (click)="rename()" label="Confirm" styleClass="p-button-text"></p-button>
       </ng-template>
     </p-dialog>
+    <p-dialog header="Versioning entry" [(visible)]="showVersionDialog" [modal]="true" [style]="{width: '50vw'}"
+              [draggable]="false" [resizable]="false">
+
+      <div class="mt-4" *ngIf="needPickTargetLink">
+        <label for="targetLink">Commit content</label><br/>
+        <p-dropdown id="targetLink" [options]="tagService.getAllList()" [(ngModel)]="commitTargetEntry"
+                    optionLabel="name" class="w-full"
+                    [filter]="true" filterBy="name" [showClear]="true" placeholder="Select the commit content">
+          <ng-template pTemplate="selectedItem">
+            <div *ngIf="commitTargetEntry">
+              {{commitTargetEntry.name}}({{commitTargetEntry.uuid}})
+            </div>
+          </ng-template>
+          <ng-template let-entry pTemplate="item">
+            <div>
+              {{entry.name}}({{entry.uuid}})
+            </div>
+          </ng-template>
+        </p-dropdown>
+      </div>
+
+      <div class="mt-4">
+        <label for="authorLink">Author link</label><br/>
+        <p-dropdown id="authorLink" [options]="tagService.getAllList()" [(ngModel)]="authorEntry"
+                    optionLabel="name" class="w-full"
+                    [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a author entry">
+          <ng-template pTemplate="selectedItem">
+            <div *ngIf="authorEntry">
+              {{authorEntry.name}}({{authorEntry.uuid}})
+            </div>
+          </ng-template>
+          <ng-template let-entry pTemplate="item">
+            <div>
+              {{entry.name}}({{entry.uuid}})
+            </div>
+          </ng-template>
+        </p-dropdown>
+      </div>
+
+      <div class="mt-4">
+        <span class="p-float-label">
+          <textarea id="commitMessage" class="w-full"
+                    [formControl]="commitMessageControl" pInputTextarea>
+          </textarea>
+          <label for="commitMessage">Commit message</label>
+        </span>
+      </div>
+
+      <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="createVersion()" label="Confirm" styleClass="p-button-text"
+          [disabled]="(needPickTargetLink && commitTargetEntry == null) || authorEntry == null || commitMessageControl.invalid"
+        ></p-button>
+      </ng-template>
+    </p-dialog>
     <p-panel header="Basic details" *ngIf="currentEntry != null">
       <ng-template pTemplate="icons">
         <ng-container>
@@ -34,12 +88,12 @@
             <button pButton type="button" label="Flatten" icon="pi pi-list" class="mx-1"
                     [disabled]="entryType != 'TREE'"
                     (click)="flatten()"></button>
-            <button pButton type="button" label="New commit" icon="pi pi-copy" class="mx-1"
-                    [disabled]="entryType == 'COMMIT'"
-                    (click)="createVersion()"></button>
             <button pButton type="button" label="Init commit" icon="pi pi-book" class="mx-1"
+                    [disabled]="entryType == 'COMMIT'"
+                    (click)="needPickTargetLink = false; commitTargetEntry = null; showVersionDialog = true;"></button>
+            <button pButton type="button" label="New commit" icon="pi pi-copy" class="mx-1"
                     [disabled]="entryType != 'COMMIT'"
-                    (click)="updateVersion()"></button>
+                    (click)="needPickTargetLink = true; commitTargetEntry = null; showVersionDialog = true;"></button>
           </div>
         </ng-container>
       </ng-template>
@@ -94,8 +148,8 @@
     <p-panel header="Sub links" *ngIf="subLinks != null">
       <app-link-list [value]="subLinks"></app-link-list>
     </p-panel>
-    <p-panel header="Sub links" *ngIf="commitInfo != null">
-      Commit Info!!!
+    <p-panel header="Commit details" *ngIf="commitInfo != null">
+      <app-commit-info [value]="commitInfo"></app-commit-info>
     </p-panel>
   </div>
 </div>

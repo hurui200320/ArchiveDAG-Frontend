@@ -5,6 +5,7 @@ import {Observable, of} from "rxjs";
 import {HttpService} from "./http.service";
 import {map} from "rxjs/operators";
 import {ObjectType, StatusEntry} from "../models/Response";
+import {Tag} from "primeng/tag";
 
 @Injectable({
   providedIn: 'root'
@@ -79,6 +80,10 @@ export class TagEntryService {
 
     let event = new MouseEvent("click");
     element.dispatchEvent(event);
+  }
+
+  public getAllList(): TagEntry[] {
+    return this.list!.map((it) => it);
   }
 
   public getChunkList(): TagEntry[] {
@@ -201,5 +206,9 @@ export class TagEntryService {
     this.typeInfo.set(tag, type);
 
     return oldMultihash;
+  }
+
+  getEntryType(entry: TagEntry): ObjectType | null {
+    return this.typeInfo.get(entry) ?? null;
   }
 }

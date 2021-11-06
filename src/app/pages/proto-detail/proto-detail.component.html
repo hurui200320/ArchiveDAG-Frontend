@@ -95,4 +95,7 @@
       </ng-template>
     </p-table>
   </p-panel>
+  <p-panel header="Commit details" *ngIf="commitInfo != null">
+    <app-commit-info [value]="commitInfo"></app-commit-info>
+  </p-panel>
 </div>

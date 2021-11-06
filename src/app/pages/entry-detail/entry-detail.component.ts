@@ -26,7 +26,7 @@ export class EntryDetailComponent implements OnInit {
 
   constructor(
     private activeRoute: ActivatedRoute,
-    private tagService: TagEntryService,
+    public tagService: TagEntryService,
     private messageService: SimpleMessageService,
     private httpService: HttpService,
     public router: Router,
@@ -100,35 +100,78 @@ export class EntryDetailComponent implements OnInit {
   }
 
   showVersionDialog: boolean = false;
-  needParentLink: boolean = true;
+  needPickTargetLink: boolean = true;
 
-  createVersion() {
-    this.needParentLink = false;
-    this.showVersionDialog = true;
-    this.httpService.createCommit(
-      `commit-${new Date().getTime()}`,
-      Math.floor(new Date().getTime() / 1000),
-      "commit message", // TODO
-      null,
-      {
+  authorEntry: TagEntry | null = null;
+  commitTargetEntry: TagEntry | null = null;
+  commitMessageControl: FormControl = new FormControl('', Validators.required);
+
+  private entryToLink(entry: TagEntry | null): SimpleLink | null {
+    if (entry == null)
+      return null;
+    return {
+      name: entry.name,
+      link: entry.multihash,
+      type: this.tagService.getEntryType(entry)!
+    }
+  }
+
+  private getCommitParent(): SimpleLink | null {
+    if (this.needPickTargetLink) {
+      // pick target link, current is parent
+      return {
         name: this.currentEntry!.name,
         link: this.currentEntry!.multihash,
         type: this.entryType!
-      },
-      { // TODO empty here
-        name: "",
-        link: "",// TODO
-        type: 'BLOB'
-      }
-    ).subscribe((resp) => {
-      // TODO
-    });
+      };
+    } else {
+      // current is target, no parent
+      return null;
+    }
   }
 
-  updateVersion() {
-    this.needParentLink = true;
-    this.showVersionDialog = true;
+  private getCommitTarget(): SimpleLink {
+    if (this.needPickTargetLink) {
+      // need pick target
+      return this.entryToLink(this.commitTargetEntry)!;
+    } else {
+      // current is target
+      this.commitTargetEntry = this.currentEntry;
+      return {
+        name: this.currentEntry!.name,
+        link: this.currentEntry!.multihash,
+        type: this.entryType!
+      };
+    }
+  }
 
+  createVersion() {
+    this.httpService.createCommit(
+      `commit-${new Date().getTime()}`,
+      Math.floor(new Date().getTime() / 1000),
+      this.commitMessageControl.value,
+      this.getCommitParent(),
+      this.getCommitTarget(),
+      this.entryToLink(this.authorEntry)!
+    ).subscribe((resp) => {
+      if (resp == null) {
+        this.messageService.addErrorMessage("Failed to create commit");
+      } else {
+        if (this.commitTargetEntry != null) {
+          this.tagService.deleteEntry(this.commitTargetEntry.uuid);
+        }
+        if (this.needPickTargetLink) {
+          // current one is commit, update it
+          this.tagService.updateEntry(this.currentEntry!.uuid, resp.link, resp.type)
+        } else {
+          // current one is not a commit, replace it with commit
+          this.tagService.deleteEntry(this.currentEntry!.uuid);
+          this.tagService.insertEntry(resp.name, resp.link, resp.type);
+        }
+        this.messageService.addSuccessMessage("Successfully create commit");
+        this.router.navigate(['/commits']).catch(err => console.error(err));
+      }
+    });
   }
 
   download() {

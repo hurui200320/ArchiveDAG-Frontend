@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {zip} from "rxjs";
 import {HttpService} from "../../services/http.service";
 import {SimpleMessageService} from "../../services/simple-message.service";
-import {SimpleLink, StatusEntry} from "../../models/Response";
+import {CommitObjectModel, SimpleLink, StatusEntry} from "../../models/Response";
 import {TagEntryService} from "../../services/tag-entry.service";
 
 @Component({
@@ -26,6 +26,7 @@ export class ProtoDetailComponent implements OnInit {
   name: string | null = null;
   status: StatusEntry | null = null;
   subLinks: SimpleLink[] | null = null;
+  commitInfo: CommitObjectModel | null = null;
 
   ngOnInit(): void {
     this.multihash = null;
@@ -58,6 +59,17 @@ export class ProtoDetailComponent implements OnInit {
               });
           } else if (type == "COMMIT") {
             // is commit, get commit info
+            this.httpService.getCommit(this.multihash!)
+              .subscribe((resp) => {
+                if (resp != null) {
+                  this.commitInfo = resp;
+                } else {
+                  this.messageService.addErrorMessage(
+                    "Failed to query commit info",
+                    this.multihash!
+                  )
+                }
+              });
           }
         }
       });
@@ -71,7 +83,7 @@ export class ProtoDetailComponent implements OnInit {
   addToRepo() {
     let resp = this.tagService.insertEntry(this.name!, this.multihash!, this.status!.type);
     if (resp != null) {
-      this.messageService.addSuccessMessage(`Add entry ${this.name!}`, `uuid: ${resp}`);
+      this.messageService.addSuccessMessage(`Add entry ${this.name!}`, `uuid: ${resp.uuid}`);
     } else {
       this.messageService.addErrorMessage(`Cannot add entry ${this.name!}`, "Get null response");
     }

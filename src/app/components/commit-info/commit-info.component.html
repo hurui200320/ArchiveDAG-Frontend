@@ -1,0 +1,49 @@
+<p-table [value]="[1]" *ngIf="value">
+  <ng-template pTemplate="body">
+    <tr>
+      <td>Commit time</td>
+      <td>
+        {{ value.unix_timestamp }}
+      </td>
+    </tr>
+    <tr>
+      <td>Message</td>
+      <td>
+        {{ value.commit_message }}
+      </td>
+    </tr>
+
+    <tr *ngIf="value.parent_link">
+      <td>Parent link</td>
+      <td>
+        <button pButton type="button" label="Details"
+                icon="pi pi-search" class="p-button-outlined"
+                (click)="router.navigate(['/proto' , value.parent_link.link],
+                      { queryParams: { name: 'parent_link' }})"
+        ></button>
+      </td>
+    </tr>
+
+    <tr>
+      <td>Author link</td>
+      <td>
+        <button pButton type="button" label="Details"
+                icon="pi pi-search" class="p-button-outlined"
+                (click)="router.navigate(['/proto' , value.author_link.link],
+                      { queryParams: { name: 'author_link' }})"
+        ></button>
+      </td>
+    </tr>
+
+    <tr>
+      <td>Commit link</td>
+      <td>
+        <button pButton type="button" label="Details"
+                icon="pi pi-search" class="p-button-outlined"
+                (click)="router.navigate(['/proto' , value.commit_link.link],
+                      { queryParams: { name: 'commit_link' }})"
+        ></button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
