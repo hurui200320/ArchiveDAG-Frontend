@@ -4,9 +4,11 @@ import {WelcomeComponent} from "./pages/welcome/welcome.component";
 import {HomeComponent} from "./pages/home/home.component";
 import {LoginGuard} from "./guards/login.guard";
 import {UploadFileComponent} from "./pages/upload-file/upload-file.component";
-import {EntryDetailComponent} from "./components/entry-detail/entry-detail.component";
-import {VersioningComponent} from "./pages/versioning/versioning.component";
-import {EntryRepoComponent} from "./pages/entry-repo/entry-repo.component";
+import {EntryDetailComponent} from "./pages/entry-detail/entry-detail.component";
+import {ProtoDetailComponent} from "./pages/proto-detail/proto-detail.component";
+import {RepoChunksComponent} from "./pages/repo-chunks/repo-chunks.component";
+import {RepoTreesComponent} from "./pages/repo-trees/repo-trees.component";
+import {RepoCommitsComponent} from "./pages/repo-commits/repo-commits.component";
 
 const routes: Routes = [
   {
@@ -19,8 +21,18 @@ const routes: Routes = [
     canActivate: [LoginGuard]
   },
   {
-    path: 'repo',
-    component: EntryRepoComponent,
+    path: 'chunks',
+    component: RepoChunksComponent,
+    canActivate: [LoginGuard]
+  },
+  {
+    path: 'trees',
+    component: RepoTreesComponent,
+    canActivate: [LoginGuard]
+  },
+  {
+    path: 'commits',
+    component: RepoCommitsComponent,
     canActivate: [LoginGuard]
   },
   {
@@ -29,14 +41,14 @@ const routes: Routes = [
     component: UploadFileComponent,
   },
   {
-    path: 'versioning',
-    canActivate: [LoginGuard],
-    component: VersioningComponent
-  },
-  {
     path: 'entry/:uuid',
     component: EntryDetailComponent,
     canActivate: [LoginGuard],
+  },
+  {
+    path: 'proto/:multihash',
+    canActivate: [LoginGuard],
+    component: ProtoDetailComponent
   },
   {
     path: '**',

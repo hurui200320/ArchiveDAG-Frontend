@@ -19,15 +19,20 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {InputTextModule} from "primeng/inputtext";
 import {RippleModule} from "primeng/ripple";
 import {UploadFileComponent} from './pages/upload-file/upload-file.component';
-import {EntryDetailComponent} from './components/entry-detail/entry-detail.component';
+import {EntryDetailComponent} from './pages/entry-detail/entry-detail.component';
 import {TableModule} from "primeng/table";
 import {PanelModule} from "primeng/panel";
 import {EntryListComponent} from './components/entry-list/entry-list.component';
 import {TruncateMultihashPipe} from './pipes/truncate-multihash.pipe';
 import {CalendarModule} from "primeng/calendar";
-import { VersioningComponent } from './pages/versioning/versioning.component';
-import { EntryRepoComponent } from './pages/entry-repo/entry-repo.component';
 import {TagModule} from "primeng/tag";
+import {DialogModule} from "primeng/dialog";
+import { ProtoDetailComponent } from './pages/proto-detail/proto-detail.component';
+import {DropdownModule} from "primeng/dropdown";
+import { RepoChunksComponent } from './pages/repo-chunks/repo-chunks.component';
+import { RepoTreesComponent } from './pages/repo-trees/repo-trees.component';
+import { RepoCommitsComponent } from './pages/repo-commits/repo-commits.component';
+import { LinkListComponent } from './components/link-list/link-list.component';
 
 @NgModule({
   declarations: [
@@ -40,8 +45,11 @@ import {TagModule} from "primeng/tag";
     EntryDetailComponent,
     EntryListComponent,
     TruncateMultihashPipe,
-    VersioningComponent,
-    EntryRepoComponent,
+    ProtoDetailComponent,
+    RepoChunksComponent,
+    RepoTreesComponent,
+    RepoCommitsComponent,
+    LinkListComponent,
   ],
     imports: [
         BrowserModule,
@@ -61,6 +69,8 @@ import {TagModule} from "primeng/tag";
         PanelModule,
         CalendarModule,
         TagModule,
+        DialogModule,
+        DropdownModule,
     ],
   providers: [MessageService],
   bootstrap: [AppComponent]

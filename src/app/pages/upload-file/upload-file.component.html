@@ -1,12 +1,30 @@
 <div class="py-3">
   <p-panel header="Upload file" class="px-5" *ngIf="uploadedResult.length == 0">
+    <div class="mt-4 mb-3">
+        <span class="p-float-label">
+        <input id="prefix" type="text"
+               class="w-full"
+               [formControl]="prefix" pInputText>
+        <label for="prefix">Name prefix</label>
+      </span>
+    </div>
     <p-fileUpload name="files" [url]="uploadUrl" [multiple]="true"
+                  [disabled]="uploading"
+                  [showUploadButton]="!uploading"
                   (onBeforeUpload)="beforeUpload($event)"
                   (onUpload)="afterUpload($event)"
                   (onError)="uploadError($event)"
     ></p-fileUpload>
   </p-panel>
   <p-panel header="Upload result" class="px-5" *ngIf="uploadedResult.length != 0">
+    <ng-template pTemplate="icons">
+      <ng-container>
+        <div class="flex align-items-center justify-content-end">
+          <button pButton type="button" label="Done" icon="pi pi-check" class="mx-1"
+                  [routerLink]="['/chunks']"></button>
+        </div>
+      </ng-container>
+    </ng-template>
     <div>
       <app-entry-list [value]="uploadedResult"></app-entry-list>
     </div>

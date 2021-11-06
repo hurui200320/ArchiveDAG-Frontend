@@ -11,4 +11,12 @@ export interface SimpleLink {
   type: ObjectType
 }
 
+export interface CommitObjectModel{
+  unix_timestamp: number,
+  commit_message: string,
+  parent_link?: SimpleLink,
+  commit_link: SimpleLink,
+  author_link: SimpleLink
+}
+
 export type ObjectType = 'BLOB' | 'LIST' | 'TREE' | 'COMMIT';

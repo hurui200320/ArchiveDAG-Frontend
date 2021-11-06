@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {TagEntry} from "../../models/TagEntry";
-import {SortMeta} from "primeng/api";
+import {TagEntryService} from "../../services/tag-entry.service";
 
 @Component({
   selector: 'app-entry-list',
@@ -14,7 +14,10 @@ export class EntryListComponent implements OnInit {
   @Input() selection: TagEntry[] = [];
   @Output() selectionChange = new EventEmitter();
 
-  constructor() { }
+  constructor(
+    public tagService: TagEntryService
+  ) {
+  }
 
   ngOnInit(): void {
   }

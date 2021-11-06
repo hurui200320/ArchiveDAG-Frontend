@@ -19,19 +19,19 @@ export class MenuComponent implements OnInit {
   ngOnInit(): void {
     this.items = [
       {
-        label: 'Repo',
+        label: 'Chunks',
+        icon: 'pi pi-images',
+        routerLink: '/chunks'
+      },
+      {
+        label: 'Trees',
+        icon: 'pi pi-folder',
+        routerLink: '/trees'
+      },
+      {
+        label: 'Commits',
         icon: 'pi pi-book',
-        routerLink: '/repo'
-      },
-      {
-        label: 'Upload',
-        icon: 'pi pi-arrow-circle-up',
-        routerLink: '/upload'
-      },
-      {
-        label: 'Versioning',
-        icon: 'pi pi-tags',
-        routerLink: '/versioning'
+        routerLink: '/commits'
       },
       {
         label: 'Export',

@@ -79,9 +79,7 @@ export class WelcomeComponent implements OnInit {
           console.log("Validate backend!");
           this.tagService.load(this.loadedTags).subscribe((resp) => {
             this.busying = false;
-            this.router.navigate(["/home"]).then(r => {
-              if (!r) this.messageService.addErrorMessage("Cannot navigate to home page");
-            });
+            this.router.navigate(["/home"]).catch((err) => console.error(err));
           });
         } else {
           this.messageService.addErrorMessage("Cannot validate backend");

@@ -4,11 +4,11 @@ import {TagEntryService} from "../../services/tag-entry.service";
 import {SimpleMessageService} from "../../services/simple-message.service";
 
 @Component({
-  selector: 'app-entry-repo',
-  templateUrl: './entry-repo.component.html',
-  styleUrls: ['./entry-repo.component.css']
+  selector: 'app-repo-chunks',
+  templateUrl: './repo-chunks.component.html',
+  styleUrls: ['./repo-chunks.component.css']
 })
-export class EntryRepoComponent implements OnInit {
+export class RepoChunksComponent implements OnInit {
 
   tags: TagEntry[] = [];
   selectedTags: TagEntry[] = [];
@@ -19,7 +19,11 @@ export class EntryRepoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.tags = this.tagService.getRepoList();
+    this.refresh();
+  }
+
+  private refresh() {
+    this.tags = this.tagService.getChunkList();
   }
 
   removeSelected() {
@@ -28,7 +32,7 @@ export class EntryRepoComponent implements OnInit {
     })
     this.messageService.addInfoMessage(`Removed ${this.selectedTags.length} tags.`)
     this.selectedTags = [];
-    this.tags = this.tagService.getRepoList();
+    this.refresh();
   }
 
   createTree() {
@@ -40,4 +44,5 @@ export class EntryRepoComponent implements OnInit {
         }
       });
   }
+
 }

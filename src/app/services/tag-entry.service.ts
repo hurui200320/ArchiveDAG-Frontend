@@ -28,10 +28,17 @@ export class TagEntryService {
       .pipe(map((resp) => {
         if (resp == null) return false;
         // fetch type info
+        let notFindList: TagEntry[] = [];
         this.list!.forEach((it) => {
           let stats = resp[it.multihash] as StatusEntry;
-          this.typeInfo.set(it, stats.type);
+          if (stats) {
+            this.typeInfo.set(it, stats.type);
+          } else {
+            notFindList.push(it);
+          }
         });
+        console.error("Link not found on server", notFindList);
+        notFindList.forEach((it) => this.deleteEntry(it.uuid));
         return true;
       }));
   }
@@ -40,11 +47,7 @@ export class TagEntryService {
     this.list = [];
 
     if (l != null) {
-      this.list = l.map((it) => {
-        // Load from json will be String, convert to Date obj
-        it.lastUpdate = new Date(it.lastUpdate);
-        return it;
-      });
+      this.list = l.map((it) => it);
       return this.updateTypeList();
     }
 
@@ -78,17 +81,16 @@ export class TagEntryService {
     element.dispatchEvent(event);
   }
 
-  public getRepoList(): TagEntry[] {
-    return this.list!.filter((it) => this.typeInfo.get(it) != 'COMMIT').map((it) => {
-      if (it.lastUpdate.constructor.name !== "Date") {
-        console.error("Expect lastUpdate has type: Date, but actual is", it.lastUpdate.constructor.name);
-      }
-      return it
-    });
+  public getChunkList(): TagEntry[] {
+    return this.list!.filter((it) => this.typeInfo.get(it) == 'BLOB' || this.typeInfo.get(it) == "LIST");
   }
 
-  public getType(entry: TagEntry): ObjectType | null {
-    return this.typeInfo.get(entry) ?? null;
+  public getTreeList(): TagEntry[] {
+    return this.list!.filter((it) => this.typeInfo.get(it) == 'TREE');
+  }
+
+  public getCommitList(): TagEntry[] {
+    return this.list!.filter((it) => this.typeInfo.get(it) == 'COMMIT');
   }
 
   public getEntry(uuid: string): TagEntry | null {
@@ -127,7 +129,7 @@ export class TagEntryService {
     return this.httpService.createTree(name, links).pipe(map((resp) => {
       if (resp == null)
         return null;
-      let entry = this.createRepoEntry(resp.name, resp.link, resp.type);
+      let entry = this.insertEntry(resp.name, resp.link, resp.type);
       return entry.uuid;
     }));
   }
@@ -137,7 +139,7 @@ export class TagEntryService {
    *
    * Return TagEntry.
    * */
-  public createRepoEntry(
+  public insertEntry(
     name: string,
     multihash: string,
     type: ObjectType
@@ -196,7 +198,6 @@ export class TagEntryService {
     let tag = find[0];
     let oldMultihash = tag.multihash;
     tag.multihash = multihash;
-    tag.lastUpdate = new Date();
     this.typeInfo.set(tag, type);
 
     return oldMultihash;

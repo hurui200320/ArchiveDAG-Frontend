@@ -5,6 +5,7 @@ import {HttpResponse} from "@angular/common/http";
 import {TagEntryService} from "../../services/tag-entry.service";
 import {TagEntry} from "../../models/TagEntry";
 import {ObjectType} from "../../models/Response";
+import {FormControl, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-upload-file',
@@ -15,6 +16,7 @@ export class UploadFileComponent implements OnInit {
 
   uploadUrl: string = "";
   uploadedResult: TagEntry[] = [];
+  prefix: FormControl  = new FormControl('');
 
   constructor(
     private httpService: HttpService,
@@ -27,8 +29,10 @@ export class UploadFileComponent implements OnInit {
     this.uploadUrl = this.httpService.getHost() + '/proto/chunk';
   }
 
+  uploading: boolean = false;
+
   beforeUpload(event: any) {
-    console.log("before upload", event);
+    this.uploading = true;
     this.messageService.addInfoMessage(
       "Start uploading...",
       "Upload might take a long time, please wait patiently..."
@@ -36,10 +40,10 @@ export class UploadFileComponent implements OnInit {
   }
 
   afterUpload(event: any) {
-    console.log("after upload", event)
     let resp: HttpResponse<{ name: string, link: string, type: ObjectType }[]> = event.originalEvent;
+    let namePrefix = this.prefix.value as string;
     this.uploadedResult = resp.body?.map((result) => {
-      return this.tagService.createRepoEntry(result.name, result.link, result.type);
+      return this.tagService.insertEntry(namePrefix + result.name, result.link, result.type);
     }) ?? [];
 
     if (this.uploadedResult.length == 0) {
@@ -53,13 +57,15 @@ export class UploadFileComponent implements OnInit {
         `Uploaded ${this.uploadedResult.length} file(s).`
       );
     }
+    this.uploading = false;
   }
 
   uploadError(event: any) {
+    this.uploading = false;
     this.messageService.addErrorMessage(
       "Upload failed",
       "Please refer to console for more detailed info."
     );
-    console.log("upload error", event)
+    console.error("upload error", event)
   }
 }

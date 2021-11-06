@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {catchError, map, tap} from "rxjs/operators";
 import {Observable, of, OperatorFunction} from "rxjs";
-import {SimpleLink} from "../models/Response";
+import {CommitObjectModel, SimpleLink} from "../models/Response";
 
 @Injectable({
   providedIn: 'root'
@@ -61,6 +61,25 @@ export class HttpService {
       .pipe(this.defaultErrorPipe<any>());
   }
 
+  private setting = {
+    element: {
+      dynamicDownload: null as (HTMLElement | null)
+    }
+  }
+
+  public downloadChunk(fileName: string, link: string) {
+    if (!this.setting.element.dynamicDownload) {
+      this.setting.element.dynamicDownload = document.createElement('a');
+    }
+    const element = this.setting.element.dynamicDownload;
+    element.setAttribute('href', `${this.host}/proto/chunk?link=${link}`);
+    element.setAttribute('target', '_blank')
+    element.setAttribute('download', fileName);
+
+    let event = new MouseEvent("click");
+    element.dispatchEvent(event);
+  }
+
   public createTree(name: string, links: SimpleLink[]): Observable<SimpleLink | null> {
     let url = this.host + "/proto/tree";
     return this.httpClient.post<SimpleLink>(url, {
@@ -68,5 +87,40 @@ export class HttpService {
       links: links
     })
       .pipe(this.defaultErrorPipe<SimpleLink>());
+  }
+
+  public getSubLinks(link: string): Observable<SimpleLink[] | null> {
+    let url = this.host + "/proto/sub_link";
+    let param = new HttpParams().set("link", link);
+    return this.httpClient.get<SimpleLink[]>(url, {
+      params: param
+    })
+      .pipe(this.defaultErrorPipe<SimpleLink[]>());
+  }
+
+  public createCommit(
+    name: string, unix_timestamp: number, commit_message: string,
+    parent_link: SimpleLink | null, commit_link: SimpleLink,
+    author_link: SimpleLink
+  ): Observable<SimpleLink | null> {
+    let url = this.host + "/proto/commit";
+    return this.httpClient.post<SimpleLink>(url, {
+      name: name,
+      unix_timestamp: unix_timestamp,
+      commit_message: commit_message,
+      parent_link: parent_link,
+      commit_link: commit_link,
+      author_link: author_link
+    })
+      .pipe(this.defaultErrorPipe<SimpleLink>());
+  }
+
+  public getCommit(link: string): Observable<CommitObjectModel | null> {
+    let url = this.host + "/proto/commit";
+    let param = new HttpParams().set("link", link);
+    return this.httpClient.get<CommitObjectModel>(url, {
+      params: param
+    })
+      .pipe(this.defaultErrorPipe<CommitObjectModel>());
   }
 }

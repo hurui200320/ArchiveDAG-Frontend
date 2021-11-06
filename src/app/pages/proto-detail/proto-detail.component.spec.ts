@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { VersioningComponent } from './versioning.component';
+import { ProtoDetailComponent } from './proto-detail.component';
 
-describe('VersioningComponent', () => {
-  let component: VersioningComponent;
-  let fixture: ComponentFixture<VersioningComponent>;
+describe('ProtoDetailComponent', () => {
+  let component: ProtoDetailComponent;
+  let fixture: ComponentFixture<ProtoDetailComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ VersioningComponent ]
+      declarations: [ ProtoDetailComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(VersioningComponent);
+    fixture = TestBed.createComponent(ProtoDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

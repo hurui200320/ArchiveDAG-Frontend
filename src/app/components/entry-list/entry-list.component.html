@@ -24,18 +24,6 @@
         <p-columnFilter type="text" field="multihash" display="menu"></p-columnFilter>
       </th>
 
-      <th pSortableColumn="lastUpdate">
-        Last update
-        <p-sortIcon field="lastUpdate"></p-sortIcon>
-        <p-columnFilter type="date" field="lastUpdate" display="menu">
-          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-            <p-calendar #calendar [ngModel]="value" (onSelect)="filter(calendar.value)"
-                        dateFormat="yy-mm-dd"></p-calendar>
-          </ng-template>
-        </p-columnFilter>
-      </th>
-
-
       <th></th> <!-- empty one for detail button-->
     </tr>
   </ng-template>
@@ -47,7 +35,6 @@
       <td>{{asTag(tag).uuid}}</td>
       <td>{{asTag(tag).name}}</td>
       <td>{{asTag(tag).multihash | truncateMultihash}} </td>
-      <td>{{asTag(tag).lastUpdate | date: "yyyy-MM-dd HH:mm:ss"}}</td>
       <td>
         <button pButton type="button" label="Details"
                 icon="pi pi-search" class="p-button-outlined"

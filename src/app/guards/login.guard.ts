@@ -15,9 +15,7 @@ export class LoginGuard implements CanActivate {
   canActivate(): boolean {
     if (this.tagService.hasLoaded())
       return true;
-    this.router.navigate(['']).then((r) => {
-      if (!r) console.error("Cannot navigate to default page");
-    });
+    this.router.navigate(['']).catch((err) => console.error(err));
     return false;
   }
 

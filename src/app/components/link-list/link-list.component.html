@@ -1,0 +1,44 @@
+<p-table [value]="value" [paginator]="true" [rows]="20">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>
+        Name
+        <p-columnFilter type="text" field="name" display="menu"></p-columnFilter>
+      </th>
+
+      <th>
+        Link
+        <p-columnFilter type="text" field="name" display="menu"></p-columnFilter>
+      </th>
+
+      <th>
+        Type
+        <p-columnFilter field="type" matchMode="equals" display="menu">
+          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+            <p-dropdown [ngModel]="value" [options]="objectTypes" (onChange)="filter($event.value)" placeholder="Any">
+              <ng-template let-option pTemplate="item">
+                <span>{{option}}</span>
+              </ng-template>
+            </p-dropdown>
+          </ng-template>
+        </p-columnFilter>
+      </th>
+
+      <th></th> <!-- empty one for detail button-->
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-link>
+    <tr>
+      <td>{{asLink(link).name}}</td>
+      <td>{{asLink(link).link}}</td>
+      <td>{{asLink(link).type}}</td>
+      <td>
+        <button pButton type="button" label="Details"
+                icon="pi pi-search" class="p-button-outlined"
+                (click)="router.navigate(['/proto' , asLink(link).link],
+                      { queryParams: { name: asLink(link).name }})"
+        ></button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
