@@ -188,4 +188,8 @@ export class EntryDetailComponent implements OnInit {
     }
     this.showRenameDialog = false;
   }
+
+  preview() {
+    this.httpService.downloadChunk(this.currentEntry!.name, this.currentEntry!.multihash, "inline");
+  }
 }

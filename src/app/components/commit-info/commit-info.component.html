@@ -3,7 +3,7 @@
     <tr>
       <td>Commit time</td>
       <td>
-        {{ value.unix_timestamp }}
+        {{ value.unix_timestamp * 1000 | date: 'yyyy-MM-dd HH:mm:ss' }}
       </td>
     </tr>
     <tr>

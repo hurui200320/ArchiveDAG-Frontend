@@ -67,12 +67,17 @@ export class HttpService {
     }
   }
 
-  public downloadChunk(fileName: string, link: string) {
+  public downloadChunk(fileName: string, link: string, type: "attachment" | "inline" = "attachment") {
     if (!this.setting.element.dynamicDownload) {
       this.setting.element.dynamicDownload = document.createElement('a');
     }
     const element = this.setting.element.dynamicDownload;
-    element.setAttribute('href', `${this.host}/proto/chunk?link=${link}`);
+    const cleanedFilename = fileName.replace("/", "_")
+      .replace("?", "_")
+      .replace("&", "_")
+      .replace("=", "_")
+    const url = `${this.host}/proto/chunk/${encodeURIComponent(cleanedFilename)}?link=${link}&type=${type}`;
+    element.setAttribute('href', url);
     element.setAttribute('target', '_blank')
     element.setAttribute('download', fileName);
 

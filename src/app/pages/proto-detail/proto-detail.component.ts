@@ -92,4 +92,8 @@ export class ProtoDetailComponent implements OnInit {
   download() {
     this.httpService.downloadChunk(this.name!, this.multihash!);
   }
+
+  preview() {
+    this.httpService.downloadChunk(this.name!, this.multihash!, "inline");
+  }
 }

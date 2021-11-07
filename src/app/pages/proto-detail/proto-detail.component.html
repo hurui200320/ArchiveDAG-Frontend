@@ -41,7 +41,7 @@
         <tr *ngIf="status != null && status.media_type != null">
           <td>Media type</td>
           <td>
-            {{ status.media_type }}
+            <a (click)="preview()" target="_blank">{{ status.media_type }} (Click to preview)</a>
           </td>
         </tr>
         <!--          <tr *ngIf="status != null">-->
