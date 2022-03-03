@@ -1,5 +1,11 @@
-<p-toast></p-toast>
-<app-menu *ngIf="shouldShowMenuBar()"></app-menu>
-<router-outlet></router-outlet>
-<app-footer></app-footer>
+<nb-layout>
 
+  <nb-layout-column>
+    <router-outlet></router-outlet>
+  </nb-layout-column>
+
+  <nb-layout-footer fixed>
+    <app-footer></app-footer>
+  </nb-layout-footer>
+
+</nb-layout>
