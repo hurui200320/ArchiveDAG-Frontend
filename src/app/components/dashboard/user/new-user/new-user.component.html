@@ -1,0 +1,55 @@
+<h3>Create new user</h3>
+
+<form (ngSubmit)="onSubmit()" #form="ngForm" aria-labelledby="title">
+
+  <div class="form-control-group">
+    <label class="label" for="input-username">Username:</label>
+    <input nbInput fullWidth
+           [(ngModel)]="username"
+           #user="ngModel"
+           name="username"
+           id="input-username"
+           placeholder="Username"
+           autofocus
+           [status]="user.dirty ? (user.invalid  ? 'danger' : 'success') : 'basic'"
+           [required]="true"
+           [attr.aria-invalid]="user.invalid && user.touched ? true : null">
+    <ng-container *ngIf="user.invalid && user.touched">
+      <p class="caption status-danger" *ngIf="user.errors?['required'] : null">
+        Username is required!
+      </p>
+    </ng-container>
+  </div>
+
+  <div class="form-control-group">
+    <label class="label" for="input-password">Password:</label>
+    <input nbInput
+           fullWidth
+           [(ngModel)]="password"
+           #passwd="ngModel"
+           name="password"
+           type="password"
+           id="input-password"
+           placeholder="Password"
+           [status]="passwd.dirty ? (passwd.invalid  ? 'danger' : 'success') : 'basic'"
+           [required]="true"
+           [minlength]="5"
+           [maxlength]="255"
+           [attr.aria-invalid]="passwd.invalid && passwd.touched ? true : null">
+    <ng-container *ngIf="passwd.invalid && passwd.touched ">
+      <p class="caption status-danger" *ngIf="passwd.errors?['required'] : null">
+        Password is required!
+      </p>
+    </ng-container>
+  </div>
+
+  <div style="margin-top: 2rem">
+    <button nbButton
+            fullWidth
+            status="success"
+            [disabled]="submitted || !form.valid"
+            [class.btn-pulse]="submitted">
+      Submit
+    </button>
+  </div>
+</form>

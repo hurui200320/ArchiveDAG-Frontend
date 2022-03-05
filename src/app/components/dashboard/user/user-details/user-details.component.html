@@ -1,0 +1,101 @@
+<h3>Details for user: {{username}}</h3>
+<form #form="ngForm" aria-labelledby="title">
+
+  <div class="form-control-group">
+    <label class="label" for="input-username">Username:</label>
+    <input nbInput fullWidth
+           [(ngModel)]="username"
+           name="username"
+           id="input-username"
+           disabled/>
+  </div>
+
+  <div class="form-control-group">
+    <label class="label" for="input-password">New password (left empty for no change):</label>
+    <input nbInput
+           fullWidth
+           [(ngModel)]="newPassword"
+           #passwd="ngModel"
+           name="password"
+           type="password"
+           id="input-password"
+           placeholder="Password"
+           [status]="passwd.dirty ? (passwd.invalid  ? 'danger' : 'success') : 'basic'"
+           [required]="false"
+           [minlength]="5"
+           [maxlength]="255"
+           [attr.aria-invalid]="passwd.invalid && passwd.touched ? true : null">
+    <ng-container *ngIf="passwd.invalid && passwd.touched ">
+      <p class="caption status-danger">
+        Password is not valid!
+      </p>
+    </ng-container>
+  </div>
+
+  <div class="form-control-group">
+    <label class="label" for="input-status">New status:</label>
+    <nb-select fullWidth
+               [(selected)]="newStatus"
+               id="input-status"
+               [status]="newStatus !== userDetails?.status ? 'success' : 'basic'">
+      <nb-option *ngFor="let s of statusList" [value]="s">{{s}}</nb-option>
+    </nb-select>
+  </div>
+
+  <div style="margin-top: 1rem">
+    <button nbButton
+            fullWidth
+            status="success"
+            (click)="applyChanges()"
+            [disabled]="!form.valid">
+      Apply changes
+    </button>
+  </div>
+
+  <div style="margin-top: 1rem">
+    <button nbButton
+            fullWidth
+            status="danger"
+            (click)="deleteUser()"
+            [disabled]="currentUsername == username">
+      Delete user
+    </button>
+  </div>
+</form>
+
+<div style="margin-top: 3rem">
+  <h4>Roles</h4>
+</div>
+
+<form aria-labelledby="title">
+  <div class="form-control-group">
+    <label class="label" for="input-role">New role:</label>
+    <nb-select fullWidth [(selected)]="newRole" id="input-role">
+      <nb-option *ngFor="let r of roleList" [value]="r">{{r}}</nb-option>
+    </nb-select>
+  </div>
+
+  <div style="margin-top: 1rem; margin-bottom: 2rem">
+    <button nbButton
+            fullWidth
+            status="success"
+            (click)="addUserRole()"
+            [disabled]="roleList.indexOf(newRole) < 0">
+      Add role
+    </button>
+  </div>
+</form>
+
+<nb-accordion multi>
+  <nb-accordion-item *ngFor="let r of roles">
+    <nb-accordion-item-header>
+      {{r}}
+    </nb-accordion-item-header>
+    <nb-accordion-item-body>
+      <button nbButton (click)="removeUserRole(r)" status="danger">
+        <nb-icon icon="trash-2"></nb-icon>
+        Remove
+      </button>
+    </nb-accordion-item-body>
+  </nb-accordion-item>
+</nb-accordion>

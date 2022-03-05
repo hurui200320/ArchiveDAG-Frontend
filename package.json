@@ -4,7 +4,6 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "start_proxy": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -23,6 +22,7 @@
     "@nebular/auth": "^9.0.1",
     "@nebular/eva-icons": "9.0.1",
     "@nebular/theme": "^9.0.1",
+    "@rx-angular/state": "^1.5.1",
     "eva-icons": "^1.1.2",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",

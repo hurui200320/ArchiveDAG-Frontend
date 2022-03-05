@@ -1,0 +1,19 @@
+<nb-layout>
+
+  <nb-sidebar>
+    <nb-sidebar-header>
+      <p>{{username}} (Exp: {{expTime | duration}})</p>
+    </nb-sidebar-header>
+    <nb-menu [items]="items"></nb-menu>
+  </nb-sidebar>
+
+  <nb-layout-column>
+    <router-outlet></router-outlet>
+  </nb-layout-column>
+
+  <nb-layout-footer fixed>
+    <app-footer></app-footer>
+  </nb-layout-footer>
+</nb-layout>
+
+

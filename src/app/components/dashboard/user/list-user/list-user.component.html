@@ -1,0 +1,33 @@
+<h3>List user</h3>
+<button nbButton [routerLink]="['/dashboard/user/new_user']">
+  <nb-icon icon="plus"></nb-icon>
+  New user
+</button>
+<br/>
+<input nbInput [(ngModel)]="keyword" placeholder="keyword" (change)="page=1;refresh()"/>
+<br/>
+<button nbButton (click)="page = page - 1;refresh()" [disabled]="page <= 1">
+  <nb-icon icon="chevron-left"></nb-icon>
+  Prev
+</button>
+<input nbInput [(ngModel)]="page" style="max-width: 5rem" [min]="1" (change)="refresh()"/>
+<button nbButton (click)="page = page + 1;refresh()" [disabled]="userList.length != size">
+  <nb-icon icon="chevron-right"></nb-icon>
+  Next
+</button>
+
+<nb-accordion multi>
+  <nb-accordion-item *ngFor="let user of userList">
+    <nb-accordion-item-header>
+      {{user.username}} ({{user.status}}), {{user.roles.length}} role(s)
+    </nb-accordion-item-header>
+    <nb-accordion-item-body>
+      <p>{{user.roles.join(",")}}</p>
+      <button nbButton [routerLink]="['/dashboard/user/details', user.username]">
+        <nb-icon icon="search"></nb-icon>
+        Details
+      </button>
+    </nb-accordion-item-body>
+  </nb-accordion-item>
+</nb-accordion>
+
