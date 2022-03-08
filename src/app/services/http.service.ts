@@ -3,7 +3,7 @@ import {catchError, Observable, of, OperatorFunction} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {NbTokenService} from "@nebular/auth";
-import {UserDetails, UserStatus} from "../models/user-models";
+import {CertDetails, CertStatus, NewCertResponse, UserDetails, UserStatus} from "../models/http-models";
 
 // Use "err" in resp to see if the request is ok.
 export interface HttpError {
@@ -76,6 +76,28 @@ export class HttpService {
     }).pipe(this.defaultErrorPipe<T>());
   }
 
+  private setting = {
+    element: {
+      dynamicDownload: null as (HTMLElement | null)
+    }
+  }
+
+  public dynamicDownloadByHtmlTag(
+    fileName: string,
+    text: string
+  ) {
+    if (!this.setting.element.dynamicDownload) {
+      this.setting.element.dynamicDownload = document.createElement('a');
+    }
+    const element = this.setting.element.dynamicDownload;
+    const fileType = fileName.indexOf('.json') > -1 ? 'text/json' : 'text/plain';
+    element.setAttribute('href', `data:${fileType};charset=utf-8,${encodeURIComponent(text)}`);
+    element.setAttribute('download', fileName);
+
+    let event = new MouseEvent("click");
+    element.dispatchEvent(event);
+  }
+
   // ------------------------- API Implementation -------------------------
 
   // User API
@@ -146,7 +168,47 @@ export class HttpService {
   }
 
   // Cert API
-  // TODO
+
+  public signNewCert(): Observable<NewCertResponse | HttpError> {
+    return this.doGet<NewCertResponse>("/cert/signNewCert", new HttpParams());
+  }
+
+  public listCertSerialNumber(blurredOwner: string, page: number, size: number): Observable<string[] | HttpError> {
+    return this.doGet<string[]>("/cert/listCertSerialNumber", new HttpParams()
+      .set("owner", blurredOwner)
+      .set("page", page)
+      .set("size", size)
+      .set("sort", "username,asc"));
+  }
+
+  public queryCert(serialNumber: string): Observable<CertDetails | HttpError> {
+    return this.doGet<CertDetails>("/cert/queryCert", new HttpParams()
+      .set("serial_number", serialNumber));
+  }
+
+  public changeCertStatus(serialNumber: string, newStatus: CertStatus): Observable<null | HttpError> {
+    return this.doPost<null>("/cert/changeCertStatus", {
+      serial_number: serialNumber,
+      new_status: newStatus
+    });
+  }
+
+  public deleteCert(serialNumber: string): Observable<null | HttpError> {
+    return this.doDelete("/cert/deleteCert", new HttpParams()
+      .set("serial_number", serialNumber));
+  }
+
+  // Maintenance API
+  public listConfig(prefix: string, page: number, size: number): Observable<Map<string, string | null> | HttpError> {
+    return this.doGet("/maintain/listConfig", new HttpParams()
+      .set("prefix", prefix)
+      .set("page", page)
+      .set("size", size));
+  }
+
+  public updateConfig(config: Map<string, string | null>): Observable<null | HttpError> {
+    return this.doPost<null>("/maintain/updateConfig", Object.fromEntries(config));
+  }
 
 }
 

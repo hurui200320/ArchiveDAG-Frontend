@@ -1,1 +1,70 @@
-<p>list-config works!</p>
+<h3>Server configurations</h3>
+
+<input nbInput fullWidth [(ngModel)]="prefix"
+       placeholder="prefix filter"
+       (change)="page=1;refresh()"/>
+<br/>
+<button nbButton (click)="page = page - 1;refresh()" [disabled]="page <= 1">
+  <nb-icon icon="chevron-left"></nb-icon>
+  Prev
+</button>
+<input nbInput [(ngModel)]="page" style="max-width: 5rem" [min]="1" (change)="refresh()"/>
+<button nbButton (click)="page = page + 1;refresh()" [disabled]="configMap.size != size">
+  <nb-icon icon="chevron-right"></nb-icon>
+  Next
+</button>
+
+<form aria-labelledby="title">
+  <div class="form-control-group"
+       style="margin-top: 2rem"
+       *ngFor="let c of configMap | keyvalue">
+    <label class="label" for="config-{{c.key}}">{{c.key}}</label>
+    <br/>
+    <textarea nbInput fullWidth style="resize: vertical"
+              name="{{c.key}}"
+              [defaultValue]="c.value"
+              #valueInput
+              [status]="changedConfigMap.has(c.key) ? 'warning' : 'basic'"
+              (change)="updateConfig(c.key, valueInput.value)"
+              id="config-{{c.key}}"></textarea>
+    <br/>
+    <button nbButton
+            status="danger"
+            (click)="deleteConfig(c.key)">
+      Delete
+    </button>
+  </div>
+</form>
+
+<h3>Changed but not submitted config:</h3>
+
+<form aria-labelledby="title">
+  <div class="form-control-group"
+       style="margin-top: 2rem"
+       *ngFor="let c of changedConfigMap | keyvalue">
+    <label class="label" for="display-{{c.key}}">{{c.key}}</label>
+    <br/>
+    <textarea nbInput fullWidth
+              *ngIf="c.value != null"
+              style="resize: vertical"
+              name="{{c.key}}"
+              [value]="c.value"
+              disabled
+              id="display-{{c.key}}"></textarea>
+    <p *ngIf="c.value == null">This config will be deleted.</p>
+    <br/>
+    <button nbButton
+            status="danger"
+            (click)="changedConfigMap.delete(c.key)">
+      Cancel
+    </button>
+  </div>
+
+  <div style="margin-top: 2rem">
+    <button nbButton
+            status="success"
+            (click)="applyChanges()">
+      Apply changes
+    </button>
+  </div>
+</form>

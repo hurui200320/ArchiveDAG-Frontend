@@ -7,6 +7,10 @@ export class DurationPipe implements PipeTransform {
 
   // assuming value is seconds
   transform(value: number): string {
+    if (value <= 0) {
+      return "---";
+    }
+
     let seconds = ~~(value % 60);
     value = ~~(value / 60); // in minutes
     let minutes = ~~(value % 60);

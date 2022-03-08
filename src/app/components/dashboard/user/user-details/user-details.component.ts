@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {HttpService} from "../../../../services/http.service";
 import {NbToastrService} from "@nebular/theme";
-import {UserDetails, UserStatus} from "../../../../models/user-models";
+import {UserDetails, UserStatus} from "../../../../models/http-models";
 import {HttpErrorResponse} from "@angular/common/http";
 import {MemStorageService} from "../../../../services/mem-storage.service";
 

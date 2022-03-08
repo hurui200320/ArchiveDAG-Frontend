@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpService} from "../../../../services/http.service";
-import {UserDetails} from "../../../../models/user-models";
+import {UserDetails} from "../../../../models/http-models";
 import {NbToastrService} from "@nebular/theme";
 
 @Component({

@@ -1,1 +1,32 @@
-<p>list-cert works!</p>
+<h3>List certifications</h3>
+
+<input nbInput fullWidth [(ngModel)]="blurredOwner"
+       placeholder="Blur owner search, leave empty if you're not admin"
+       (change)="page=1;refresh()"/>
+<br/>
+<button nbButton (click)="page = page - 1;refresh()" [disabled]="page <= 1">
+  <nb-icon icon="chevron-left"></nb-icon>
+  Prev
+</button>
+<input nbInput [(ngModel)]="page" style="max-width: 5rem" [min]="1" (change)="refresh()"/>
+<button nbButton (click)="page = page + 1;refresh()" [disabled]="certList.length != size">
+  <nb-icon icon="chevron-right"></nb-icon>
+  Next
+</button>
+
+<nb-accordion multi>
+  <nb-accordion-item *ngFor="let cert of certList">
+    <nb-accordion-item-header>
+      [{{cert.status}}]{{cert.serialNumber}} ({{cert.owner}}), issued
+      at {{cert.issuedTimestamp * 1000 | date: "yyyy-MM-dd HH:mm:ss" }}
+    </nb-accordion-item-header>
+    <nb-accordion-item-body>
+      <p>Expired at: {{cert.expiredTimestamp * 1000 | date: "yyyy-MM-dd HH:mm:ss"}}</p>
+      <button nbButton [routerLink]="['/dashboard/cert/details', cert.serialNumber]">
+        <nb-icon icon="search"></nb-icon>
+        Details
+      </button>
+    </nb-accordion-item-body>
+  </nb-accordion-item>
+</nb-accordion>
+
