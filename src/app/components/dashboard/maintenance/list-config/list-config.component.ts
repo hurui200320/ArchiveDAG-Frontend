@@ -14,6 +14,9 @@ export class ListConfigComponent implements OnInit {
   size: number = 10;
   submitting: boolean = false;
 
+  newConfigKey: string = "";
+  newConfigValue: string = "";
+
   configMap: Map<string, string | null> = new Map<string, string | null>();
 
   changedConfigMap: Map<string, string | null> = new Map<string, string | null>();
