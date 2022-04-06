@@ -19,7 +19,7 @@ export class UserDetailsComponent implements OnInit {
   newPassword: string = "";
   newStatus: UserStatus = "ENABLED";
   newRole: string = "";
-  statusList: UserStatus[] = ["ENABLED", "DISABLED", "LOCKED"];
+  statusList: UserStatus[] = ["ENABLED", "DISABLED"];
 
   userDetails: UserDetails | null = null;
   roles: string[] = [];

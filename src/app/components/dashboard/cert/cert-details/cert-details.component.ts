@@ -14,7 +14,7 @@ export class CertDetailsComponent implements OnInit {
 
   certNumber: string = "";
   newStatus: CertStatus = "ENABLED";
-  statusList: CertStatus[] = ["ENABLED", "DISABLED", "REVOKED", "LOCKED"];
+  statusList: CertStatus[] = ["ENABLED", "DISABLED"];
   certDetails: CertDetails | null = null;
 
   constructor(

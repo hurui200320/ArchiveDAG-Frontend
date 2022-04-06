@@ -1,4 +1,4 @@
-export type UserStatus = "ENABLED" | "DISABLED" | "LOCKED";
+export type UserStatus = "ENABLED" | "DISABLED";
 
 export interface UserDetails {
   username: string;
@@ -12,7 +12,7 @@ export interface NewCertResponse {
   private_key: string;
 }
 
-export type CertStatus = "ENABLED" | "DISABLED" | "REVOKED" | "LOCKED"
+export type CertStatus = "ENABLED" | "DISABLED"
 
 export interface CertDetails {
   serialNumber: string;
